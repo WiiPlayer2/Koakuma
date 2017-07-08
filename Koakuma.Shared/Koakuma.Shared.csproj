@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Messages\BasicMessage.cs" />
     <Compile Include="Messages\KoakumaMessage.cs" />
     <Compile Include="Messages\BaseMessage.cs" />
     <Compile Include="Messages\MessageType.cs" />
