@@ -34,8 +34,8 @@
       <HintPath>..\packages\BouncyCastle.1.8.1\lib\BouncyCastle.Crypto.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MessageNetwork, Version=1.0.6395.991, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MessageNetwork.1.0.6395.991\lib\net452\MessageNetwork.dll</HintPath>
+    <Reference Include="MessageNetwork, Version=1.0.6398.43046, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MessageNetwork.1.0.6398.43046\lib\net452\MessageNetwork.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -52,6 +52,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Messages\KoakumaMessage.cs" />
+    <Compile Include="Messages\BaseMessage.cs" />
+    <Compile Include="Messages\MessageType.cs" />
+    <Compile Include="Messages\ModuleID.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
