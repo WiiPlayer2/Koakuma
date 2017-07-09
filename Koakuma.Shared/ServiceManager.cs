@@ -31,7 +31,8 @@ namespace Koakuma.Shared
 
         public override void HandleControl(ModuleID from, BasicMessage controlMsg)
         {
-            switch (controlMsg.Data)
+            var splits = controlMsg.Data.Split(':');
+            switch (splits[0])
             {
                 case "Start":
                     service.Start();
@@ -40,10 +41,10 @@ namespace Koakuma.Shared
                     service.Stop();
                     break;
                 case "RegisterHook":
-                    RegisterHook(from, controlMsg.Data);
+                    RegisterHook(from, splits[1]);
                     break;
                 case "UnregisterHook":
-                    UnregisterHook(from, controlMsg.Data);
+                    UnregisterHook(from, splits[1]);
                     break;
             }
         }

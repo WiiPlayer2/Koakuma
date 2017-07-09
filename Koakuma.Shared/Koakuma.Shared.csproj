@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="IKoakuma.cs" />
     <Compile Include="IModule.cs" />
+    <Compile Include="InterfaceHookManager.cs" />
     <Compile Include="IService.cs" />
     <Compile Include="KoakumaBaseInterface.cs" />
     <Compile Include="KoakumaNode.cs" />

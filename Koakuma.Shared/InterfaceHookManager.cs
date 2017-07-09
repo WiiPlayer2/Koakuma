@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace Koakuma.Shared
 {
-    class InterfaceEventManager<T>
+    class InterfaceHookManager<T>
         where T : class
     {
         private HashSet<T> delegates = new HashSet<T>();
 
-        static InterfaceEventManager()
+        static InterfaceHookManager()
         {
             if(!typeof(T).IsSubclassOf(typeof(Delegate)))
             {
@@ -20,7 +20,7 @@ namespace Koakuma.Shared
             }
         }
 
-        public InterfaceEventManager(IModule module, string hook, ModuleID target)
+        public InterfaceHookManager(ModuleID target, IModule module, string hook)
         {
             Module = module;
             Hook = hook;

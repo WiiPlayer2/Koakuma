@@ -163,8 +163,8 @@ namespace Koakuma.Shared
                 Koakuma.SendHook(hook, new BasicMessage()
                 {
                     Action = BasicMessage.ActionType.Data,
-                    Data = $"{hook}:{key.ExponentBytes.Length}:{key.ModulusBytes.Length}",
-                }, key.ExponentBytes.Concat(key.ModulusBytes).ToArray());
+                    Data = $"{hook}|{key}",
+                });
             }
 
             #endregion Private Methods
