@@ -13,6 +13,63 @@ namespace Koakuma.Shared
 {
     public class KoakumaNode : MessageNode<KoakumaMessage>
     {
+        private class Base : IService
+        {
+            public Base(KoakumaNode node)
+            {
+                Node = node;
+            }
+
+            public KoakumaNode Node { get; private set; }
+
+            public ModuleFeatures Features { get { return ModuleFeatures.Service; } }
+
+            public IEnumerable<string> Hooks
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            public string ID { get { return "koakuma.base"; } }
+
+            public IEnumerable<string> Invokes
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            public IKoakuma Koakuma { get; set; }
+
+            public void Invoke(string command, BaseMessage msg, byte[] payload = null)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Load()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Start()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Stop()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Unload()
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         #region Public Constructors
 
         public KoakumaNode(AsymmetricCipherKeyPair keyPair) : base(keyPair)
