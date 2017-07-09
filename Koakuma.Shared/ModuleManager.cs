@@ -16,17 +16,16 @@ namespace Koakuma.Shared
         #region Private Fields
 
         private Dictionary<int, Action<BaseMessage>> callbacks;
-        private IModule mod;
         private int nextMsgId = 0;
         private Dictionary<int, Timer> timers;
 
         #endregion Private Fields
-        
+
         #region Public Constructors
 
         public ModuleManager(KoakumaNode node, IModule module)
         {
-            mod = module;
+            Module = module;
             Node = node;
 
             callbacks = new Dictionary<int, Action<BaseMessage>>();
@@ -43,10 +42,15 @@ namespace Koakuma.Shared
 
         #region Protected Properties
 
+        public KoakumaNode Node { get; private set; }
         protected ModuleID ID { get; private set; }
-        protected KoakumaNode Node { get; private set; }
-
         #endregion Protected Properties
+
+        #region Public Properties
+
+        public IModule Module { get; private set; }
+
+        #endregion Public Properties
 
         #region Public Methods
 
@@ -77,6 +81,8 @@ namespace Koakuma.Shared
             }, timeout);
         }
 
+        public virtual void HandleControl(ModuleID from, BasicMessage controlMsg) { }
+
         public void Invoke(ModuleID receiver, string command, byte[] payload = null)
         {
             SendMessage(receiver, new BasicMessage()
@@ -104,10 +110,7 @@ namespace Koakuma.Shared
             }, timeout, callback, timeoutCallback, payload);
         }
 
-        public void SendHook(string hook, BaseMessage msg, byte[] payload = null)
-        {
-            throw new NotImplementedException();
-        }
+        public virtual void SendHook(string hook, BaseMessage msg, byte[] payload = null) { }
 
         public void SendMessage(ModuleID receiver, BaseMessage msg, byte[] payload = null)
         {
@@ -160,7 +163,6 @@ namespace Koakuma.Shared
             SendMessage(receiver, msg, payload);
             timer.Start();
         }
-
         #endregion Public Methods
     }
 }

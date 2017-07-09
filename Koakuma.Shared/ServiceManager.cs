@@ -1,0 +1,103 @@
+﻿using Koakuma.Shared.Messages;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Koakuma.Shared
+{
+    class ServiceManager : ModuleManager
+    {
+        #region Private Fields
+
+        private Dictionary<string, HashSet<ModuleID>> registeredHooks;
+        private IService service;
+
+        #endregion Private Fields
+
+        #region Public Constructors
+
+        public ServiceManager(KoakumaNode node, IService service)
+            : base(node, service)
+        {
+            this.service = service;
+            registeredHooks = new Dictionary<string, HashSet<ModuleID>>();
+        }
+
+        #endregion Public Constructors
+
+        #region Public Methods
+
+        public override void HandleControl(ModuleID from, BasicMessage controlMsg)
+        {
+            switch (controlMsg.Data)
+            {
+                case "Start":
+                    service.Start();
+                    break;
+                case "Stop":
+                    service.Stop();
+                    break;
+                case "RegisterHook":
+                    RegisterHook(from, controlMsg.Data);
+                    break;
+                case "UnregisterHook":
+                    UnregisterHook(from, controlMsg.Data);
+                    break;
+            }
+        }
+
+        public override void SendHook(string hook, BaseMessage msg, byte[] payload = null)
+        {
+            if (registeredHooks.ContainsKey(hook))
+            {
+                foreach (var id in registeredHooks[hook])
+                {
+                    SendMessage(id, msg, payload);
+                }
+            }
+        }
+
+        #endregion Public Methods
+
+        #region Private Methods
+
+        private void RegisterHook(ModuleID from, string hook)
+        {
+            if (registeredHooks[hook] == null)
+            {
+                lock (registeredHooks)
+                {
+                    registeredHooks[hook] = new HashSet<ModuleID>();
+                }
+            }
+            lock (registeredHooks[hook])
+            {
+                registeredHooks[hook].Add(from);
+            }
+        }
+
+        private void UnregisterHook(ModuleID from, string hook)
+        {
+            var isEmpty = false;
+            if (registeredHooks[hook].Contains(from))
+            {
+                lock (registeredHooks[hook])
+                {
+                    registeredHooks[hook].Remove(from);
+                    isEmpty = !registeredHooks[hook].Any();
+                }
+            }
+            if (isEmpty)
+            {
+                lock (registeredHooks)
+                {
+                    registeredHooks.Remove(hook);
+                }
+            }
+        }
+
+        #endregion Private Methods
+    }
+}
