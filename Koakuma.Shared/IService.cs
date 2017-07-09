@@ -16,6 +16,6 @@ namespace Koakuma.Shared
 
         IEnumerable<string> Invokes { get; }
 
-        void Invoke(string command, BaseMessage msg, byte[] payload = null);
+        void Invoke(ModuleID from, string command, byte[] payload = null);
     }
 }

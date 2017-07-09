@@ -48,6 +48,11 @@ namespace Koakuma.Shared
             }
         }
 
+        public override void HandleInvoke(ModuleID from, BasicMessage invokeMsg, byte[] payload)
+        {
+            service.Invoke(from, invokeMsg.Data, payload);
+        }
+
         public override void SendHook(string hook, BaseMessage msg, byte[] payload = null)
         {
             if (registeredHooks.ContainsKey(hook))

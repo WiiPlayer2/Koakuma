@@ -11,7 +11,11 @@ namespace Koakuma.Shared
 {
     public class ModuleConfig
     {
+        #region Private Fields
+
         private static Regex lineRegex = new Regex(@"^(?<key>[^\. =]+(\.[^\. =]+)*) *= *(?<value>.*)$");
+
+        #endregion Private Fields
 
         #region Private Fields
 

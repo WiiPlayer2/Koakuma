@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Koakuma.Shared.Messages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,9 @@ namespace Koakuma.Shared
         ModuleConfig Config { get; set; }
 
         void Load();
+        void Reload();
         void Unload();
+
+        void OnMessage(BaseMessage msg, byte[] payload);
     }
 }
