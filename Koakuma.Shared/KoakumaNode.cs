@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Org.BouncyCastle.Crypto;
 using System.Net;
+using Org.BouncyCastle.Crypto.Parameters;
 
 namespace Koakuma.Shared
 {
@@ -16,11 +17,13 @@ namespace Koakuma.Shared
 
         public KoakumaNode(AsymmetricCipherKeyPair keyPair) : base(keyPair)
         {
+            PublicKey = keyPair.Public as RsaKeyParameters;
             throw new NotImplementedException();
         }
 
         public KoakumaNode(AsymmetricCipherKeyPair keyPair, IPAddress localaddr, int port) : base(keyPair, localaddr, port)
         {
+            PublicKey = keyPair.Public as RsaKeyParameters;
             throw new NotImplementedException();
         }
 
@@ -35,6 +38,8 @@ namespace Koakuma.Shared
                 throw new NotImplementedException();
             }
         }
+
+        public PublicKey PublicKey { get; private set; }
 
         #endregion Public Properties
 

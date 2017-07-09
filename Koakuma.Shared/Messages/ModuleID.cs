@@ -10,7 +10,7 @@ namespace Koakuma.Shared.Messages
     [Serializable]
     public class ModuleID
     {
-        public PublicKey PublicKey { get; private set; }
+        public PublicKey PublicKey { get; set; }
 
         public string ModuleName { get; set; }
     }

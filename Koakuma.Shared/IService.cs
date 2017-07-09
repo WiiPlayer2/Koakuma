@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Koakuma.Shared.Messages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +11,11 @@ namespace Koakuma.Shared
     {
         void Start();
         void Stop();
+
+        IEnumerable<string> Hooks { get; }
+
+        IEnumerable<string> Invokes { get; }
+
+        void Invoke(string command, BaseMessage msg, byte[] payload = null);
     }
 }

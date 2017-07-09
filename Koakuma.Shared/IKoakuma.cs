@@ -18,5 +18,9 @@ namespace Koakuma.Shared
         Task<BaseMessage> Invoke(ModuleID receiver, string command, TimeSpan timeout, byte[] payload = null);
 
         void Control(ModuleID receiver, string command);
+        void Control(ModuleID receiver, string command, TimeSpan timeout, Action<BaseMessage> callback, Action timeoutCallback);
+        Task<BaseMessage> Control(ModuleID receiver, string command, TimeSpan timeout);
+
+        void SendHook(string hook, BaseMessage msg, byte[] payload = null);
     }
 }
