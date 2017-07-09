@@ -88,17 +88,14 @@ namespace Koakuma.Shared
         private Dictionary<string, IModule> modules = new Dictionary<string, IModule>();
 
         #region Public Constructors
-
-        //TODO: export publickey from MessageNode
+        
         public KoakumaNode(AsymmetricCipherKeyPair keyPair) : base(keyPair)
         {
-            PublicKey = keyPair.Public as RsaKeyParameters;
             Init();
         }
 
         public KoakumaNode(AsymmetricCipherKeyPair keyPair, IPAddress localaddr, int port) : base(keyPair, localaddr, port)
         {
-            PublicKey = keyPair.Public as RsaKeyParameters;
             Init();
         }
 
@@ -150,8 +147,6 @@ namespace Koakuma.Shared
                 }
             }
         }
-
-        public PublicKey PublicKey { get; private set; }
 
         #endregion Public Properties
 
