@@ -13,6 +13,8 @@ namespace Koakuma.Shared
 
         IKoakuma Koakuma { get; set; }
 
+        ModuleConfig Config { get; set; }
+
         void Load();
         void Unload();
     }
