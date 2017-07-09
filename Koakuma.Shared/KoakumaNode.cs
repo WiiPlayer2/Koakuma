@@ -21,6 +21,8 @@ namespace Koakuma.Shared
             public Base(KoakumaNode node)
             {
                 Node = node;
+                Node.NodeJoined += (_, key) => SendNodeHook("node.joined", key);
+                Node.NodeLeft += (_, key) => SendNodeHook("node.left", key);
             }
 
             public KoakumaNode Node { get; private set; }
@@ -31,8 +33,21 @@ namespace Koakuma.Shared
             {
                 get
                 {
-                    throw new NotImplementedException();
+                    return new[]
+                    {
+                        "node.joined",
+                        "node.left",
+                    };
                 }
+            }
+
+            private void SendNodeHook(string hook, PublicKey key)
+            {
+                Koakuma.SendHook(hook, new BasicMessage()
+                {
+                    Action = BasicMessage.ActionType.Data,
+                    Data = $"{hook}:{key.ExponentBytes.Length}:{key.ModulusBytes.Length}",
+                }, key.ExponentBytes.Concat(key.ModulusBytes).ToArray());
             }
 
             public string ID { get { return "koakuma.base"; } }
@@ -41,7 +56,10 @@ namespace Koakuma.Shared
             {
                 get
                 {
-                    throw new NotImplementedException();
+                    return new[]
+                    {
+                        "modules.list",
+                    };
                 }
             }
 
@@ -49,39 +67,42 @@ namespace Koakuma.Shared
 
             public ModuleConfig Config { get; set; }
 
-            public void Invoke(ModuleID from ,string command, byte[] payload = null)
+            public void Invoke(ModuleID from, string command, byte[] payload = null)
             {
-                throw new NotImplementedException();
+                switch(command)
+                {
+                    case "modules.list":
+                        Koakuma.SendMessage(from, new BasicMessage()
+                        {
+                            Action = BasicMessage.ActionType.Data,
+                            Data = string.Join(",", Node.Modules.Select(o => o.ID.ToLowerInvariant())),
+                        });
+                        break;
+                }
             }
 
             public void Load()
             {
-                throw new NotImplementedException();
             }
 
             public void Start()
             {
-                throw new NotImplementedException();
             }
 
             public void Stop()
             {
-                throw new NotImplementedException();
             }
 
             public void Unload()
             {
-                throw new NotImplementedException();
             }
 
             public void Reload()
             {
-                throw new NotImplementedException();
             }
 
-            public void OnMessage(BaseMessage msg, byte[] payload)
+            public void OnMessage(ModuleID from, BaseMessage msg, byte[] payload)
             {
-                throw new NotImplementedException();
             }
         }
 

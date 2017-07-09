@@ -107,7 +107,7 @@ namespace Koakuma.Shared
                 }
                 else
                 {
-                    Module.OnMessage(msg.Message, payload);
+                    Module.OnMessage(msg.From, msg.Message, payload);
                 }
             }
             catch { }

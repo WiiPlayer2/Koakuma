@@ -34,8 +34,8 @@
       <HintPath>..\packages\BouncyCastle.1.8.1\lib\BouncyCastle.Crypto.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MessageNetwork, Version=1.0.6398.43046, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MessageNetwork.1.0.6398.43046\lib\net452\MessageNetwork.dll</HintPath>
+    <Reference Include="MessageNetwork, Version=1.0.6399.27839, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MessageNetwork.1.0.6399.27839\lib\net452\MessageNetwork.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">

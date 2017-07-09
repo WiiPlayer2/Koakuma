@@ -20,6 +20,6 @@ namespace Koakuma.Shared
         void Reload();
         void Unload();
 
-        void OnMessage(BaseMessage msg, byte[] payload);
+        void OnMessage(ModuleID from, BaseMessage msg, byte[] payload);
     }
 }
