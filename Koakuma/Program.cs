@@ -23,6 +23,7 @@ namespace Koakuma
             Console.WriteLine($"[  APP  ] {dataFolder}");
             Directory.CreateDirectory(dataFolder);
             Directory.CreateDirectory(Path.Combine(dataFolder, "plugins"));
+            Directory.CreateDirectory(Path.Combine(dataFolder, "dependecies"));
             Directory.CreateDirectory(Path.Combine(dataFolder, "configs"));
             Directory.CreateDirectory(Path.Combine(dataFolder, "trusted_keys"));
             Directory.CreateDirectory(Path.Combine(dataFolder, "add_keys"));
@@ -53,6 +54,15 @@ namespace Koakuma
             {
                 node.TrustedKeys.Add(f);
                 File.Delete(f);
+            }
+
+            foreach (var f in Directory.EnumerateFiles(Path.Combine(dataFolder, "dependecies")))
+            {
+                try
+                {
+                    Assembly.LoadFile(Path.GetFullPath(f));
+                }
+                finally { }
             }
 
             foreach (var mod in Directory.EnumerateFiles(Path.Combine(dataFolder, "plugins"))
