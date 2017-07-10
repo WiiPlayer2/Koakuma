@@ -71,7 +71,7 @@ namespace Koakuma.Shared
 
         private void RegisterHook(ModuleID from, string hook)
         {
-            if (registeredHooks[hook] == null)
+            if (!registeredHooks.ContainsKey(hook))
             {
                 lock (registeredHooks)
                 {
@@ -87,7 +87,7 @@ namespace Koakuma.Shared
         private void UnregisterHook(ModuleID from, string hook)
         {
             var isEmpty = false;
-            if (registeredHooks[hook].Contains(from))
+            if (registeredHooks.ContainsKey(hook) && registeredHooks[hook].Contains(from))
             {
                 lock (registeredHooks[hook])
                 {

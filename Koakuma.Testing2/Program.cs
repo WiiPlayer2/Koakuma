@@ -50,10 +50,17 @@ namespace Koakuma.Testing2
             private void BaseInterface_NodeJoined(KoakumaBaseInterface sender, PublicKey publicKey)
             {
                 Console.WriteLine(publicKey);
+                var base2 = new KoakumaBaseInterface(new ModuleID()
+                {
+                    PublicKey = publicKey,
+                    ModuleName = "koakuma.base",
+                }, this);
+                Console.WriteLine(string.Join(",", base2.Modules));
             }
 
             public void OnMessage(ModuleID from, BaseMessage msg, byte[] payload)
             {
+                baseInterface.HandleMessage(from, msg, payload);
             }
 
             public void Reload()

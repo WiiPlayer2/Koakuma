@@ -86,13 +86,13 @@ namespace Koakuma.Shared
         {
             if(msg.Message.Type == MessageType.Basic)
             {
-                switch((msg.Message as BasicMessage).Action)
+                switch(msg.Message.Cast<BasicMessage>().Action)
                 {
                     case BasicMessage.ActionType.Control:
-                        HandleControl(msg.From, msg.Message as BasicMessage);
+                        HandleControl(msg.From, msg.Message.Cast<BasicMessage>());
                         return;
                     case BasicMessage.ActionType.Invoke:
-                        HandleInvoke(msg.From, msg.Message as BasicMessage, payload);
+                        HandleInvoke(msg.From, msg.Message.Cast<BasicMessage>(), payload);
                         return;
                 }
             }
