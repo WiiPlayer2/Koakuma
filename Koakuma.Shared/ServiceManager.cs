@@ -1,13 +1,10 @@
 ﻿using Koakuma.Shared.Messages;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Koakuma.Shared
 {
-    class ServiceManager : ModuleManager
+    internal class ServiceManager : ModuleManager
     {
         #region Private Fields
 
@@ -37,12 +34,15 @@ namespace Koakuma.Shared
                 case "Start":
                     service.Start();
                     break;
+
                 case "Stop":
                     service.Stop();
                     break;
+
                 case "RegisterHook":
                     RegisterHook(from, splits[1]);
                     break;
+
                 case "UnregisterHook":
                     UnregisterHook(from, splits[1]);
                     break;
@@ -52,7 +52,7 @@ namespace Koakuma.Shared
         public override void HandleInvoke(ModuleID from, int? replyID, BasicMessage invokeMsg, byte[] payload)
         {
             var ret = service.Invoke(from, invokeMsg.Data, payload);
-            if(replyID.HasValue && ret != null)
+            if (replyID.HasValue && ret != null)
             {
                 Node.SendMessage(from.PublicKey, new KoakumaMessage()
                 {

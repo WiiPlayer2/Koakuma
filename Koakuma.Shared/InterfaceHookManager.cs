@@ -2,19 +2,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Koakuma.Shared
 {
-    class InterfaceHookManager<T>
+    internal class InterfaceHookManager<T>
         where T : class
     {
         private HashSet<T> delegates = new HashSet<T>();
 
         static InterfaceHookManager()
         {
-            if(!typeof(T).IsSubclassOf(typeof(Delegate)))
+            if (!typeof(T).IsSubclassOf(typeof(Delegate)))
             {
                 throw new NotSupportedException($"{typeof(T)} is not a delegate.");
             }
@@ -37,7 +35,7 @@ namespace Koakuma.Shared
         {
             var wasEmpty = !delegates.Any();
             delegates.Add(val);
-            if(wasEmpty)
+            if (wasEmpty)
             {
                 Module.Koakuma.Control(Target, $"RegisterHook:{Hook}");
             }
@@ -46,7 +44,7 @@ namespace Koakuma.Shared
         public void Remove(T val)
         {
             delegates.Remove(val);
-            if(!delegates.Any())
+            if (!delegates.Any())
             {
                 Module.Koakuma.Control(Target, $"UnregisterHook:{Hook}");
             }
@@ -54,7 +52,7 @@ namespace Koakuma.Shared
 
         public void Invoke(params object[] args)
         {
-            foreach(var d in delegates)
+            foreach (var d in delegates)
             {
                 (d as Delegate).DynamicInvoke(args);
             }

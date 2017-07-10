@@ -2,10 +2,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Koakuma.Shared.Messages
 {
@@ -26,7 +22,7 @@ namespace Koakuma.Shared.Messages
         {
             get
             {
-                if(Message == null)
+                if (Message == null)
                 {
                     return null;
                 }
@@ -34,7 +30,7 @@ namespace Koakuma.Shared.Messages
             }
             set
             {
-                if(value == null)
+                if (value == null)
                 {
                     Message = null;
                     return;

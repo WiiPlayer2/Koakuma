@@ -1,13 +1,10 @@
 ﻿using Koakuma.Shared.Messages;
 using MessageNetwork;
-using System;
+using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto.Parameters;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Org.BouncyCastle.Crypto;
 using System.Net;
-using Org.BouncyCastle.Crypto.Parameters;
 using System.Text.RegularExpressions;
 
 namespace Koakuma.Shared
@@ -48,7 +45,7 @@ namespace Koakuma.Shared
             else
             {
                 var mods = Modules;
-                if(message.From.PublicKey == PublicKey)
+                if (message.From.PublicKey == PublicKey)
                 {
                     mods = mods.Where(o => o.ID != message.From.ModuleName);
                 }
@@ -85,6 +82,7 @@ namespace Koakuma.Shared
 
             public ModuleConfig Config { get; set; }
             public ModuleFeatures Features { get { return ModuleFeatures.Service; } }
+
             public IEnumerable<string> Hooks
             {
                 get
@@ -98,6 +96,7 @@ namespace Koakuma.Shared
             }
 
             public string ID { get { return "koakuma.base"; } }
+
             public IEnumerable<string> Invokes
             {
                 get
@@ -225,6 +224,7 @@ namespace Koakuma.Shared
                     case ModuleFeatures.Service:
                         module.Koakuma = new ServiceManager(this, module as IService);
                         break;
+
                     default:
                         module.Koakuma = new ModuleManager(this, module);
                         break;

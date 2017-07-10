@@ -1,9 +1,4 @@
 ﻿using Koakuma.Shared.Messages;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Koakuma.Shared
 {
@@ -17,7 +12,9 @@ namespace Koakuma.Shared
         ModuleConfig Config { get; set; }
 
         void Load();
+
         void Reload();
+
         void Unload();
 
         void OnMessage(ModuleID from, BaseMessage msg, byte[] payload);

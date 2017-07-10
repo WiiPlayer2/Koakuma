@@ -1,18 +1,13 @@
-﻿using System;
+﻿using Koakuma.Shared.Messages;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Koakuma.Shared.Messages;
-using System.Timers;
 using System.Threading;
-
+using System.Threading.Tasks;
 using Timer = System.Timers.Timer;
-using MessageNetwork;
 
 namespace Koakuma.Shared
 {
-    class ModuleManager : IKoakuma
+    internal class ModuleManager : IKoakuma
     {
         #region Private Fields
 
@@ -44,9 +39,11 @@ namespace Koakuma.Shared
         #region Protected Properties
 
         public KoakumaNode Node { get; private set; }
+
         #endregion Protected Properties
 
         #region Public Properties
+
         public ModuleID ModuleID { get; private set; }
 
         public IModule Module { get; private set; }
@@ -91,6 +88,7 @@ namespace Koakuma.Shared
                     case BasicMessage.ActionType.Control:
                         HandleControl(msg.From, msg.Message.Cast<BasicMessage>());
                         return;
+
                     case BasicMessage.ActionType.Invoke:
                         HandleInvoke(msg.From, msg.ReplyID, msg.Message.Cast<BasicMessage>(), payload);
                         return;
@@ -113,9 +111,13 @@ namespace Koakuma.Shared
             catch { }
         }
 
-        public virtual void HandleControl(ModuleID from, BasicMessage controlMsg) { }
+        public virtual void HandleControl(ModuleID from, BasicMessage controlMsg)
+        {
+        }
 
-        public virtual void HandleInvoke(ModuleID from, int? replyID, BasicMessage invokeMsg, byte[] payload) { }
+        public virtual void HandleInvoke(ModuleID from, int? replyID, BasicMessage invokeMsg, byte[] payload)
+        {
+        }
 
         public void Invoke(ModuleID receiver, string command, byte[] payload = null)
         {
@@ -144,7 +146,9 @@ namespace Koakuma.Shared
             }, timeout, callback, timeoutCallback, payload);
         }
 
-        public virtual void SendHook(string hook, BaseMessage msg, byte[] payload = null) { }
+        public virtual void SendHook(string hook, BaseMessage msg, byte[] payload = null)
+        {
+        }
 
         public void SendMessage(ModuleID receiver, BaseMessage msg, byte[] payload = null)
         {
@@ -204,6 +208,7 @@ namespace Koakuma.Shared
             }, payload);
             timer.Start();
         }
+
         #endregion Public Methods
     }
 }

@@ -1,9 +1,5 @@
 ﻿using MessageNetwork;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Koakuma.Shared.Messages
 {
@@ -26,7 +22,7 @@ namespace Koakuma.Shared.Messages
 
         public override bool Equals(object obj)
         {
-            if(obj is ModuleID)
+            if (obj is ModuleID)
             {
                 return this == (ModuleID)obj;
             }

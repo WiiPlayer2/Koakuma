@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Koakuma.Shared
 {
@@ -60,6 +57,7 @@ namespace Koakuma.Shared
                 conversions[typeof(T)] = str => conversion(str);
             }
         }
+
         public T Get<T>(string key, T defaultValue)
         {
             if (values.ContainsKey(key))
