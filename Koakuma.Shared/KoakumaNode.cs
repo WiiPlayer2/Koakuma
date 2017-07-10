@@ -116,18 +116,18 @@ namespace Koakuma.Shared
 
             #region Public Methods
 
-            public void Invoke(ModuleID from, string command, byte[] payload = null)
+            public BaseMessage Invoke(ModuleID from, string command, byte[] payload = null)
             {
                 switch (command)
                 {
                     case "modules.list":
-                        Koakuma.SendMessage(from, new BasicMessage()
+                        return new BasicMessage()
                         {
                             Action = BasicMessage.ActionType.Data,
                             Data = string.Join(",", Node.Modules.Select(o => o.ID.ToLowerInvariant())),
-                        });
-                        break;
+                        };
                 }
+                return null;
             }
 
             public void Load()

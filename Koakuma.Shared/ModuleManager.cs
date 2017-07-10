@@ -92,7 +92,7 @@ namespace Koakuma.Shared
                         HandleControl(msg.From, msg.Message.Cast<BasicMessage>());
                         return;
                     case BasicMessage.ActionType.Invoke:
-                        HandleInvoke(msg.From, msg.Message.Cast<BasicMessage>(), payload);
+                        HandleInvoke(msg.From, msg.ReplyID, msg.Message.Cast<BasicMessage>(), payload);
                         return;
                 }
             }
@@ -115,7 +115,7 @@ namespace Koakuma.Shared
 
         public virtual void HandleControl(ModuleID from, BasicMessage controlMsg) { }
 
-        public virtual void HandleInvoke(ModuleID from, BasicMessage invokeMsg, byte[] payload) { }
+        public virtual void HandleInvoke(ModuleID from, int? replyID, BasicMessage invokeMsg, byte[] payload) { }
 
         public void Invoke(ModuleID receiver, string command, byte[] payload = null)
         {
@@ -167,6 +167,7 @@ namespace Koakuma.Shared
                     ret = cbmsg;
                     waitHandle.Set();
                 }, () => waitHandle.Set(), payload);
+                waitHandle.WaitOne();
                 return ret;
             });
         }
