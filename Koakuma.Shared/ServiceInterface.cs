@@ -39,11 +39,22 @@ namespace Koakuma.Shared
             return Module.Koakuma.Invoke(Target, command, Timeout, payload);
         }
 
+        protected static IEnumerable<T> BindAll<T>(string name, PublicKey key, IModule module, Func<PublicKey, IModule, T> bindFunc)
+            where T : ServiceInterface
+        {
+            return Find(name, key, module)
+                .Select(o => bindFunc(o, module));
+        }
+
         protected static IEnumerable<PublicKey> Find(string name, PublicKey key, IModule module)
         {
             if (key != null)
             {
-                var baseInterface = KoakumaBaseInterface.Bind(key, module);
+                var baseInterface = new KoakumaBaseInterface(new ModuleID()
+                {
+                    ModuleName = "koakuma.base",
+                    PublicKey = key,
+                }, module);
                 IEnumerable<string> mods = null;
                 try
                 {
@@ -87,7 +98,10 @@ namespace Koakuma.Shared
                     waitHandle.WaitOne();
                     lock (queue)
                     {
-                        yield return queue.Dequeue();
+                        if (queue.Any())
+                        {
+                            yield return queue.Dequeue();
+                        }
                     }
                 }
 
@@ -99,6 +113,6 @@ namespace Koakuma.Shared
                     }
                 }
             }
-            }
         }
     }
+}

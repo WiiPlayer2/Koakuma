@@ -33,11 +33,7 @@ namespace Koakuma.Shared
 
         public static KoakumaBaseInterface Bind(PublicKey key, IModule module)
         {
-            return new KoakumaBaseInterface(new ModuleID()
-            {
-                PublicKey = key,
-                ModuleName = "koakuma.base",
-            }, module);
+            return BindAll(key, module).FirstOrDefault();
         }
 
         public static IEnumerable<KoakumaBaseInterface> BindAll(IModule module)
@@ -47,7 +43,11 @@ namespace Koakuma.Shared
 
         public static IEnumerable<KoakumaBaseInterface> BindAll(PublicKey key, IModule module)
         {
-            return Find("koakuma.base", key, module).Select(o => Bind(o, module));
+            return BindAll("koakuma.base", key, module, (k, mod) => new KoakumaBaseInterface(new ModuleID()
+            {
+                PublicKey = k,
+                ModuleName = "koakuma.base",
+            }, mod));
         }
 
         protected override void HandleMessageInternal(ModuleID from, BaseMessage msg, byte[] payload)
