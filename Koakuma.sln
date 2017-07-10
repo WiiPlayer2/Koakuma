@@ -5,6 +5,10 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Koakuma.Shared", "Koakuma.Shared\Koakuma.Shared.csproj", "{514DA548-B6A6-4121-9011-1E86AAB5A3EA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Koakuma.Testing1", "Koakuma.Testing1\Koakuma.Testing1.csproj", "{7A433D85-A4B2-493B-926C-D1AA83516CFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Koakuma.Testing2", "Koakuma.Testing2\Koakuma.Testing2.csproj", "{A60E492D-1A71-455B-A1EE-32B6FD72F950}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{514DA548-B6A6-4121-9011-1E86AAB5A3EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{514DA548-B6A6-4121-9011-1E86AAB5A3EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{514DA548-B6A6-4121-9011-1E86AAB5A3EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A433D85-A4B2-493B-926C-D1AA83516CFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A433D85-A4B2-493B-926C-D1AA83516CFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A433D85-A4B2-493B-926C-D1AA83516CFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A433D85-A4B2-493B-926C-D1AA83516CFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A60E492D-1A71-455B-A1EE-32B6FD72F950}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A60E492D-1A71-455B-A1EE-32B6FD72F950}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A60E492D-1A71-455B-A1EE-32B6FD72F950}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A60E492D-1A71-455B-A1EE-32B6FD72F950}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,15 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{514DA548-B6A6-4121-9011-1E86AAB5A3EA}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{A60E492D-1A71-455B-A1EE-32B6FD72F950}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Koakuma.Shared</RootNamespace>
-    <AssemblyName>Koakuma.Shared</AssemblyName>
+    <RootNamespace>Koakuma.Testing2</RootNamespace>
+    <AssemblyName>Koakuma.Testing2</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -52,25 +55,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IKoakuma.cs" />
-    <Compile Include="IModule.cs" />
-    <Compile Include="InterfaceHookManager.cs" />
-    <Compile Include="IService.cs" />
-    <Compile Include="KoakumaBaseInterface.cs" />
-    <Compile Include="KoakumaNode.cs" />
-    <Compile Include="Messages\BasicMessage.cs" />
-    <Compile Include="Messages\KoakumaMessage.cs" />
-    <Compile Include="Messages\BaseMessage.cs" />
-    <Compile Include="Messages\MessageType.cs" />
-    <Compile Include="Messages\ModuleID.cs" />
-    <Compile Include="ModuleConfig.cs" />
-    <Compile Include="ModuleFeatures.cs" />
-    <Compile Include="ModuleManager.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Koakuma.Shared\Koakuma.Shared.csproj">
+      <Project>{514da548-b6a6-4121-9011-1e86aab5a3ea}</Project>
+      <Name>Koakuma.Shared</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

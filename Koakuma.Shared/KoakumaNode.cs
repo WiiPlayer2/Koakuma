@@ -205,12 +205,12 @@ namespace Koakuma.Shared
 
         public override void SendMessage(RsaKeyParameters receiver, KoakumaMessage message, byte[] payload = null)
         {
-            if (receiver == null || receiver.Equals((RsaKeyParameters)PublicKey))
+            if (receiver == null || !PublicKey.Equals(receiver))
             {
                 base.SendMessage(receiver, message, payload);
             }
 
-            if (receiver == null || receiver.Equals((RsaKeyParameters)PublicKey))
+            if (receiver == null || PublicKey.Equals(receiver))
             {
                 KoakumaNode_MessageReceived(this, receiver, receiver == null, message, payload);
             }
