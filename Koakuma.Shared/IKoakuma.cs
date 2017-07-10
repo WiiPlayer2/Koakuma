@@ -13,15 +13,15 @@ namespace Koakuma.Shared
         ModuleID ModuleID { get; }
 
         void SendMessage(ModuleID receiver, BaseMessage msg, byte[] payload = null);
-        void SendMessage(ModuleID receiver, BaseMessage msg, TimeSpan timeout, Action<BaseMessage, byte[]> callback, Action timeoutCallback, byte[] payload = null);
+        void SendMessage(ModuleID receiver, BaseMessage msg, TimeSpan timeout, MessageCallback callback, Action timeoutCallback, byte[] payload = null);
         Task<BaseMessage> SendMessage(ModuleID receiver, BaseMessage msg, TimeSpan timeout, byte[] payload = null);
 
         void Invoke(ModuleID receiver, string command, byte[] payload = null);
-        void Invoke(ModuleID receiver, string command, TimeSpan timeout, Action<BaseMessage, byte[]> callback, Action timeoutCallback, byte[] payload = null);
+        void Invoke(ModuleID receiver, string command, TimeSpan timeout, MessageCallback callback, Action timeoutCallback, byte[] payload = null);
         Task<BaseMessage> Invoke(ModuleID receiver, string command, TimeSpan timeout, byte[] payload = null);
 
         void Control(ModuleID receiver, string command);
-        void Control(ModuleID receiver, string command, TimeSpan timeout, Action<BaseMessage, byte[]> callback, Action timeoutCallback);
+        void Control(ModuleID receiver, string command, TimeSpan timeout, MessageCallback callback, Action timeoutCallback);
         Task<BaseMessage> Control(ModuleID receiver, string command, TimeSpan timeout);
 
         void SendHook(string hook, BaseMessage msg, byte[] payload = null);

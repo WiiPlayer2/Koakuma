@@ -16,7 +16,7 @@ namespace Koakuma.Shared
     {
         #region Private Fields
 
-        private Dictionary<int, Action<BaseMessage, byte[]>> callbacks;
+        private Dictionary<int, MessageCallback> callbacks;
         private int nextMsgId = 0;
         private Dictionary<int, Timer> timers;
 
@@ -29,7 +29,7 @@ namespace Koakuma.Shared
             Module = module;
             Node = node;
 
-            callbacks = new Dictionary<int, Action<BaseMessage, byte[]>>();
+            callbacks = new Dictionary<int, MessageCallback>();
             timers = new Dictionary<int, Timer>();
 
             ModuleID = new ModuleID()
@@ -64,7 +64,7 @@ namespace Koakuma.Shared
             });
         }
 
-        public void Control(ModuleID receiver, string command, TimeSpan timeout, Action<BaseMessage, byte[]> callback, Action timeoutCallback)
+        public void Control(ModuleID receiver, string command, TimeSpan timeout, MessageCallback callback, Action timeoutCallback)
         {
             SendMessage(receiver, new BasicMessage()
             {
@@ -84,9 +84,9 @@ namespace Koakuma.Shared
 
         public void HandleMessage(KoakumaMessage msg, byte[] payload)
         {
-            if(msg.Message.Type == MessageType.Basic)
+            if (msg.Message.Type == MessageType.Basic)
             {
-                switch(msg.Message.Cast<BasicMessage>().Action)
+                switch (msg.Message.Cast<BasicMessage>().Action)
                 {
                     case BasicMessage.ActionType.Control:
                         HandleControl(msg.From, msg.Message.Cast<BasicMessage>());
@@ -102,7 +102,7 @@ namespace Koakuma.Shared
                 {
                     if (callbacks.ContainsKey(msg.ReplyID.Value))
                     {
-                        callbacks[msg.ReplyID.Value](msg.Message, payload);
+                        callbacks[msg.ReplyID.Value](msg.From, msg.Message, payload);
                     }
                 }
                 else
@@ -135,7 +135,7 @@ namespace Koakuma.Shared
             }, timeout, payload);
         }
 
-        public void Invoke(ModuleID receiver, string command, TimeSpan timeout, Action<BaseMessage, byte[]> callback, Action timeoutCallback, byte[] payload = null)
+        public void Invoke(ModuleID receiver, string command, TimeSpan timeout, MessageCallback callback, Action timeoutCallback, byte[] payload = null)
         {
             SendMessage(receiver, new BasicMessage()
             {
@@ -162,7 +162,7 @@ namespace Koakuma.Shared
             {
                 var waitHandle = new ManualResetEvent(false);
                 BaseMessage ret = null;
-                SendMessage(receiver, msg, timeout, (cbmsg, _) =>
+                SendMessage(receiver, msg, timeout, (_, cbmsg, __) =>
                 {
                     ret = cbmsg;
                     waitHandle.Set();
@@ -172,7 +172,7 @@ namespace Koakuma.Shared
             });
         }
 
-        public void SendMessage(ModuleID receiver, BaseMessage msg, TimeSpan timeout, Action<BaseMessage, byte[]> callback, Action timeoutCallback, byte[] payload = null)
+        public void SendMessage(ModuleID receiver, BaseMessage msg, TimeSpan timeout, MessageCallback callback, Action timeoutCallback, byte[] payload = null)
         {
             var id = 0;
             lock (callbacks)

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Koakuma.Shared
 {
-    public class KoakumaBaseInterface
+    public class KoakumaBaseInterface : ServiceInterface
     {
         private InterfaceHookManager<NodeEventHandler> nodeJoinedHooks;
         private InterfaceHookManager<NodeEventHandler> nodeLeftHooks;
@@ -20,35 +20,47 @@ namespace Koakuma.Shared
         { }
 
         public KoakumaBaseInterface(ModuleID target, IModule module, TimeSpan timeout)
+            : base(target, module, timeout)
         {
-            Target = target;
-            Module = module;
-            Timeout = timeout;
-
             nodeJoinedHooks = new InterfaceHookManager<NodeEventHandler>(target, module, "node.joined");
             nodeLeftHooks = new InterfaceHookManager<NodeEventHandler>(target, module, "node.left");
         }
 
-        public ModuleID Target { get; private set; }
-
-        public IModule Module { get; private set; }
-
-        public TimeSpan Timeout { get; set; }
-
-        public void HandleMessage(ModuleID from, BaseMessage msg, byte[] payload)
+        public static IEnumerable<PublicKey> Find(PublicKey key, IModule module)
         {
-            if (from == Target)
+            return Find("koakuma.base", key, module);
+        }
+
+        public static KoakumaBaseInterface Bind(PublicKey key, IModule module)
+        {
+            return new KoakumaBaseInterface(new ModuleID()
             {
-                var split = msg.Cast<BasicMessage>().Data.Split('|');
-                switch (split[0])
-                {
-                    case "node.joined":
-                        nodeJoinedHooks.Invoke(this, PublicKey.Parse(split[1]));
-                        break;
-                    case "node.left":
-                        nodeLeftHooks.Invoke(this, PublicKey.Parse(split[1]));
-                        break;
-                }
+                PublicKey = key,
+                ModuleName = "koakuma.base",
+            }, module);
+        }
+
+        public static IEnumerable<KoakumaBaseInterface> BindAll(IModule module)
+        {
+            return BindAll(null, module);
+        }
+
+        public static IEnumerable<KoakumaBaseInterface> BindAll(PublicKey key, IModule module)
+        {
+            return Find("koakuma.base", key, module).Select(o => Bind(o, module));
+        }
+
+        protected override void HandleMessageInternal(ModuleID from, BaseMessage msg, byte[] payload)
+        {
+            var split = msg.Cast<BasicMessage>().Data.Split('|');
+            switch (split[0])
+            {
+                case "node.joined":
+                    nodeJoinedHooks.Invoke(this, PublicKey.Parse(split[1]));
+                    break;
+                case "node.left":
+                    nodeLeftHooks.Invoke(this, PublicKey.Parse(split[1]));
+                    break;
             }
         }
 
@@ -80,8 +92,7 @@ namespace Koakuma.Shared
         {
             get
             {
-                return Module.Koakuma.Invoke(Target, "modules.list", Timeout)
-                    .Result.Cast<BasicMessage>().Data.Split(',');
+                return Invoke("modules.list").Result.Cast<BasicMessage>().Data.Split(',');
             }
         }
     }

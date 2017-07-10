@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Delegates.cs" />
     <Compile Include="IKoakuma.cs" />
     <Compile Include="IModule.cs" />
     <Compile Include="InterfaceHookManager.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="ModuleFeatures.cs" />
     <Compile Include="ModuleManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceInterface.cs" />
     <Compile Include="ServiceManager.cs" />
   </ItemGroup>
   <ItemGroup>
