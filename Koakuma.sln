@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Koakuma.Testing1", "Koakuma
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Koakuma.Testing2", "Koakuma.Testing2\Koakuma.Testing2.csproj", "{A60E492D-1A71-455B-A1EE-32B6FD72F950}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Koakuma", "Koakuma\Koakuma.csproj", "{ED252454-6E76-40AB-83E5-A656C81A5745}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{A60E492D-1A71-455B-A1EE-32B6FD72F950}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A60E492D-1A71-455B-A1EE-32B6FD72F950}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A60E492D-1A71-455B-A1EE-32B6FD72F950}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED252454-6E76-40AB-83E5-A656C81A5745}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED252454-6E76-40AB-83E5-A656C81A5745}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED252454-6E76-40AB-83E5-A656C81A5745}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED252454-6E76-40AB-83E5-A656C81A5745}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
