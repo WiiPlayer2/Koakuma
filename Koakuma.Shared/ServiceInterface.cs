@@ -222,6 +222,12 @@ namespace Koakuma.Shared
 
         #endregion Private Methods
 
+        protected InterfaceHookManager<T> CreateHookManager<T>(string hook)
+            where T : class
+        {
+            return new InterfaceHookManager<T>(Target, Module, hook);
+        }
+
         #region Public Classes
 
         [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]

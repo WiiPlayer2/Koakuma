@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Koakuma.Shared
 {
-    internal class InterfaceHookManager<T>
+    public class InterfaceHookManager<T>
         where T : class
     {
         private HashSet<T> delegates = new HashSet<T>();
@@ -18,7 +18,7 @@ namespace Koakuma.Shared
             }
         }
 
-        public InterfaceHookManager(ModuleID target, IModule module, string hook)
+        internal InterfaceHookManager(ModuleID target, IModule module, string hook)
         {
             Module = module;
             Hook = hook;

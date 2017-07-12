@@ -29,8 +29,8 @@ namespace Koakuma.Shared
         public KoakumaBaseInterface(ModuleID target, IModule module, TimeSpan timeout)
             : base(target, module, timeout)
         {
-            nodeJoinedHooks = new InterfaceHookManager<NodeEventHandler>(target, module, "node.joined");
-            nodeLeftHooks = new InterfaceHookManager<NodeEventHandler>(target, module, "node.left");
+            nodeJoinedHooks = CreateHookManager<NodeEventHandler>("node.joined");
+            nodeLeftHooks = CreateHookManager<NodeEventHandler>("node.left");
         }
 
         protected override void HandleMessageInternal(ModuleID from, BaseMessage msg, byte[] payload)
