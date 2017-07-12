@@ -96,7 +96,7 @@ namespace Koakuma.Shared
 
         public void RemoveModule(IModule module)
         {
-            if (modules.ContainsKey(module.ID.ToLowerInvariant()))
+            if (modules.ContainsKey(module.ID.ToLowerInvariant()) && module.ID != "koakuma.base")
             {
                 lock (modules)
                 {
