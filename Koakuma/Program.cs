@@ -22,7 +22,15 @@ namespace Koakuma
         static void Main(string[] args)
         {
             dataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Koakuma");
+
+            var baseCfg = LoadConfig("koakuma.base");
+            var level = LogLevel.Verbose;
+            Enum.TryParse(baseCfg.Get("log_level", LogLevel.Info.ToString()), out level);
+            logger.OutputLevel = level;
+
             logger.Log(LogLevel.Debug, "APP", dataFolder);
+
+
             Directory.CreateDirectory(dataFolder);
             Directory.CreateDirectory(Path.Combine(dataFolder, "plugins"));
             Directory.CreateDirectory(Path.Combine(dataFolder, "dependencies"));
@@ -30,8 +38,6 @@ namespace Koakuma
             Directory.CreateDirectory(Path.Combine(dataFolder, "trusted_keys"));
             Directory.CreateDirectory(Path.Combine(dataFolder, "add_keys"));
             var keyPair = Utilities.GenerateOrLoadKeyPair(Path.Combine(dataFolder, "id_rsa"));
-
-            var baseCfg = LoadConfig("koakuma.base");
             var port = baseCfg.Get("port", -1);
             if (port >= 0)
             {
@@ -92,7 +98,7 @@ namespace Koakuma
                 while (!node.Setup(host, port))
                 {
                     Thread.Sleep(30 * 1000);
-                    
+
                     logger.Log(LogLevel.Info, "APP", "Retrying");
                     baseCfg.Reload();
 
@@ -106,7 +112,7 @@ namespace Koakuma
                 node.Setup();
             }
 
-            foreach(var service in node.Modules.OfType<IService>())
+            foreach (var service in node.Modules.OfType<IService>())
             {
                 try
                 {
@@ -114,14 +120,14 @@ namespace Koakuma
                 }
                 finally { }
             }
-            
+
             logger.Log(LogLevel.Info, "APP", "Done");
             Thread.Sleep(-1);
         }
 
         private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
-            if(deps.ContainsKey(args.Name))
+            if (deps.ContainsKey(args.Name))
             {
                 logger.Log(LogLevel.Debug, "RESOLVE", args.Name);
                 return deps[args.Name];

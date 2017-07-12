@@ -53,7 +53,7 @@ namespace Koakuma
                     }
                     else
                     {
-                        Console.WriteLine($"[{source,10}] {level.ToString()[0]}: {message}");
+                        Console.WriteLine($"[{$"{source, 15}".Substring(0, 15)}] {level.ToString()[0]}: {message}");
                     }
                 }
             }
