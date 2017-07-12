@@ -8,16 +8,11 @@ namespace Koakuma.Shared
 {
     public class ModuleConfig
     {
-        #region Private Fields
-
-        private static Regex lineRegex = new Regex(@"^(?<key>[^\. =]+(\.[^\. =]+)*) *= *(?<value>.*)$");
-
-        #endregion Private Fields
 
         #region Private Fields
 
         private static Dictionary<Type, Func<string, object>> conversions;
-
+        private static Regex lineRegex = new Regex(@"^(?<key>[^\. =]+(\.[^\. =]+)*) *= *(?<value>.*)$");
         private Dictionary<string, string> values;
 
         #endregion Private Fields
@@ -30,6 +25,7 @@ namespace Koakuma.Shared
 
             Register(o => o);
             Register(o => int.Parse(o, CultureInfo.InvariantCulture));
+            Register(o => ulong.Parse(o, CultureInfo.InvariantCulture));
             Register(o => bool.Parse(o));
         }
 
@@ -103,5 +99,6 @@ namespace Koakuma.Shared
         }
 
         #endregion Public Methods
+
     }
 }
