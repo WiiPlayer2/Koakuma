@@ -49,7 +49,7 @@ namespace Koakuma.Testing2
 
             private void BaseInterface_NodeJoined(KoakumaBaseInterface sender, PublicKey publicKey)
             {
-                foreach(var baseInterface in KoakumaBaseInterface.BindAll(this))
+                foreach(var baseInterface in KoakumaBaseInterface.BindAll<KoakumaBaseInterface>(this))
                 {
                     Console.WriteLine(string.Join(", ", baseInterface.Modules));
                 }

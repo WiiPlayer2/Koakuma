@@ -13,6 +13,15 @@ namespace Koakuma.Shared
 
         public delegate void NodeEventHandler(KoakumaBaseInterface sender, PublicKey publicKey);
 
+        static KoakumaBaseInterface()
+        {
+            Register("koakuma.base", (k, m) => new KoakumaBaseInterface(new ModuleID()
+            {
+                ModuleName = "koakuma.base",
+                PublicKey = k,
+            }, m));
+        }
+
         public KoakumaBaseInterface(ModuleID target, IModule module)
             : this(target, module, new TimeSpan(0, 0, 10))
         { }
@@ -22,30 +31,6 @@ namespace Koakuma.Shared
         {
             nodeJoinedHooks = new InterfaceHookManager<NodeEventHandler>(target, module, "node.joined");
             nodeLeftHooks = new InterfaceHookManager<NodeEventHandler>(target, module, "node.left");
-        }
-
-        public static IEnumerable<PublicKey> Find(PublicKey key, IModule module)
-        {
-            return Find("koakuma.base", key, module);
-        }
-
-        public static KoakumaBaseInterface Bind(PublicKey key, IModule module)
-        {
-            return BindAll(key, module).FirstOrDefault();
-        }
-
-        public static IEnumerable<KoakumaBaseInterface> BindAll(IModule module)
-        {
-            return BindAll(null, module);
-        }
-
-        public static IEnumerable<KoakumaBaseInterface> BindAll(PublicKey key, IModule module)
-        {
-            return BindAll("koakuma.base", key, module, (k, mod) => new KoakumaBaseInterface(new ModuleID()
-            {
-                PublicKey = k,
-                ModuleName = "koakuma.base",
-            }, mod));
         }
 
         protected override void HandleMessageInternal(ModuleID from, BaseMessage msg, byte[] payload)
