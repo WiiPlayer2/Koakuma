@@ -52,9 +52,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LogLevel.cs" />
     <Compile Include="Delegates.cs" />
     <Compile Include="IKoakuma.cs" />
     <Compile Include="IModule.cs" />
+    <Compile Include="ILogger.cs" />
     <Compile Include="InterfaceHookManager.cs" />
     <Compile Include="IService.cs" />
     <Compile Include="KoakumaBaseInterface.cs" />
@@ -66,7 +68,9 @@
     <Compile Include="Messages\ModuleID.cs" />
     <Compile Include="ModuleConfig.cs" />
     <Compile Include="ModuleFeatures.cs" />
+    <Compile Include="ModuleLogger.cs" />
     <Compile Include="ModuleManager.cs" />
+    <Compile Include="NullLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceInterface.cs" />
     <Compile Include="ServiceManager.cs" />

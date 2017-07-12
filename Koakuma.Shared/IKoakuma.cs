@@ -8,6 +8,8 @@ namespace Koakuma.Shared
     {
         ModuleID ModuleID { get; }
 
+        ILogger Logger { get; }
+
         void SendMessage(ModuleID receiver, BaseMessage msg, byte[] payload = null);
 
         void SendMessage(ModuleID receiver, BaseMessage msg, TimeSpan timeout, MessageCallback callback, Action timeoutCallback, byte[] payload = null);

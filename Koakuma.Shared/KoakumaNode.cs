@@ -11,13 +11,115 @@ namespace Koakuma.Shared
 {
     public class KoakumaNode : MessageNode<KoakumaMessage>
     {
+
         #region Private Fields
 
         private static Regex moduleRegex = new Regex(@"^\w+(\.\w+)*$");
 
+        private ILogger logger = new NullLogger();
+
         private Dictionary<string, IModule> modules = new Dictionary<string, IModule>();
 
         #endregion Private Fields
+
+        #region Public Constructors
+
+        public KoakumaNode(AsymmetricCipherKeyPair keyPair) : base(keyPair)
+        {
+            Init();
+        }
+
+        public KoakumaNode(AsymmetricCipherKeyPair keyPair, IPAddress localaddr, int port) : base(keyPair, localaddr, port)
+        {
+            Init();
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        public ILogger Logger
+        {
+            get
+            {
+                return logger;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    logger = new NullLogger();
+                }
+                else
+                {
+                    logger = value;
+                }
+            }
+        }
+        public IEnumerable<IModule> Modules
+        {
+            get
+            {
+                lock (modules)
+                {
+                    return modules.Values.ToList();
+                }
+            }
+        }
+
+        #endregion Public Properties
+
+        #region Public Methods
+
+        public void AddModule(IModule module)
+        {
+            if (moduleRegex.IsMatch(module.ID) && !modules.ContainsKey(module.ID.ToLowerInvariant()))
+            {
+                switch (module.Features)
+                {
+                    case ModuleFeatures.Service:
+                        module.Koakuma = new ServiceManager(this, module as IService);
+                        break;
+
+                    default:
+                        module.Koakuma = new ModuleManager(this, module);
+                        break;
+                }
+                lock (modules)
+                {
+                    modules[module.ID.ToLowerInvariant()] = module;
+                }
+
+                module.Load();
+            }
+        }
+
+        public void RemoveModule(IModule module)
+        {
+            if (modules.ContainsKey(module.ID.ToLowerInvariant()))
+            {
+                lock (modules)
+                {
+                    modules.Remove(module.ID.ToLowerInvariant());
+                }
+                module.Unload();
+            }
+        }
+
+        public override void SendMessage(RsaKeyParameters receiver, KoakumaMessage message, byte[] payload = null)
+        {
+            if (receiver == null || !PublicKey.Equals(receiver))
+            {
+                base.SendMessage(receiver, message, payload);
+            }
+
+            if (receiver == null || PublicKey.Equals(receiver))
+            {
+                KoakumaNode_MessageReceived(this, receiver, receiver == null, message, payload);
+            }
+        }
+
+        #endregion Public Methods
 
         #region Private Methods
 
@@ -67,6 +169,7 @@ namespace Koakuma.Shared
 
         private class Base : IService
         {
+
             #region Public Constructors
 
             public Base(KoakumaNode node)
@@ -167,89 +270,9 @@ namespace Koakuma.Shared
             }
 
             #endregion Private Methods
+
         }
 
         #endregion Private Classes
-
-        #region Public Constructors
-
-        public KoakumaNode(AsymmetricCipherKeyPair keyPair) : base(keyPair)
-        {
-            Init();
-        }
-
-        public KoakumaNode(AsymmetricCipherKeyPair keyPair, IPAddress localaddr, int port) : base(keyPair, localaddr, port)
-        {
-            Init();
-        }
-
-        #endregion Public Constructors
-
-        #region Public Properties
-
-        public IEnumerable<IModule> Modules
-        {
-            get
-            {
-                lock (modules)
-                {
-                    return modules.Values.ToList();
-                }
-            }
-        }
-
-        #endregion Public Properties
-
-        #region Public Methods
-
-        public override void SendMessage(RsaKeyParameters receiver, KoakumaMessage message, byte[] payload = null)
-        {
-            if (receiver == null || !PublicKey.Equals(receiver))
-            {
-                base.SendMessage(receiver, message, payload);
-            }
-
-            if (receiver == null || PublicKey.Equals(receiver))
-            {
-                KoakumaNode_MessageReceived(this, receiver, receiver == null, message, payload);
-            }
-        }
-
-        public void AddModule(IModule module)
-        {
-            if (moduleRegex.IsMatch(module.ID) && !modules.ContainsKey(module.ID.ToLowerInvariant()))
-            {
-                switch (module.Features)
-                {
-                    case ModuleFeatures.Service:
-                        module.Koakuma = new ServiceManager(this, module as IService);
-                        break;
-
-                    default:
-                        module.Koakuma = new ModuleManager(this, module);
-                        break;
-                }
-                lock (modules)
-                {
-                    modules[module.ID.ToLowerInvariant()] = module;
-                }
-
-                module.Load();
-            }
-        }
-
-        public void RemoveModule(IModule module)
-        {
-            if (modules.ContainsKey(module.ID.ToLowerInvariant()))
-            {
-                lock (modules)
-                {
-                    modules.Remove(module.ID.ToLowerInvariant());
-                }
-                module.Unload();
-            }
-        }
-
-        #endregion Public Methods
     }
 }

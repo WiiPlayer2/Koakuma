@@ -32,6 +32,7 @@ namespace Koakuma.Shared
                 PublicKey = node.PublicKey,
                 ModuleName = module.ID.ToLowerInvariant(),
             };
+            Logger = new ModuleLogger(node, module);
         }
 
         #endregion Public Constructors
@@ -47,6 +48,8 @@ namespace Koakuma.Shared
         public ModuleID ModuleID { get; private set; }
 
         public IModule Module { get; private set; }
+
+        public ILogger Logger { get; private set; }
 
         #endregion Public Properties
 
