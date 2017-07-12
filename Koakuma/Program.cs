@@ -16,6 +16,7 @@ namespace Koakuma
     {
         private static KoakumaNode node;
         private static string dataFolder;
+        private static Dictionary<string, Assembly> deps = new Dictionary<string, Assembly>();
 
         static void Main(string[] args)
         {
@@ -23,7 +24,7 @@ namespace Koakuma
             Console.WriteLine($"[  APP  ] {dataFolder}");
             Directory.CreateDirectory(dataFolder);
             Directory.CreateDirectory(Path.Combine(dataFolder, "plugins"));
-            Directory.CreateDirectory(Path.Combine(dataFolder, "dependecies"));
+            Directory.CreateDirectory(Path.Combine(dataFolder, "dependencies"));
             Directory.CreateDirectory(Path.Combine(dataFolder, "configs"));
             Directory.CreateDirectory(Path.Combine(dataFolder, "trusted_keys"));
             Directory.CreateDirectory(Path.Combine(dataFolder, "add_keys"));
@@ -56,14 +57,18 @@ namespace Koakuma
                 File.Delete(f);
             }
 
-            foreach (var f in Directory.EnumerateFiles(Path.Combine(dataFolder, "dependecies")))
+            foreach (var f in Directory.EnumerateFiles(Path.Combine(dataFolder, "dependencies")))
             {
                 try
                 {
-                    Assembly.LoadFile(Path.GetFullPath(f));
+                    var ass = Assembly.LoadFile(Path.GetFullPath(f));
+                    deps[ass.ToString()] = ass;
+                    Console.WriteLine($"[DEPLOAD] {ass}");
                 }
                 finally { }
             }
+
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
 
             foreach (var mod in Directory.EnumerateFiles(Path.Combine(dataFolder, "plugins"))
                 .SelectMany(o => LoadModules(o)))
@@ -109,6 +114,17 @@ namespace Koakuma
 
             Console.WriteLine($"[  APP  ] Done");
             Thread.Sleep(-1);
+        }
+
+        private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            if(deps.ContainsKey(args.Name))
+            {
+                Console.WriteLine($"[RESOLVE] {args.Name}");
+                return deps[args.Name];
+            }
+            Console.WriteLine($"[RESOLVE] FAILED: {args.Name}");
+            return null;
         }
 
         private static ModuleConfig LoadConfig(string module)
