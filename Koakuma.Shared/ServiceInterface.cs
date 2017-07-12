@@ -224,6 +224,7 @@ namespace Koakuma.Shared
 
         #region Public Classes
 
+        [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
         public sealed class Defaults : Attribute
         {
 
