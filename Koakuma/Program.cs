@@ -17,11 +17,12 @@ namespace Koakuma
         private static KoakumaNode node;
         private static string dataFolder;
         private static Dictionary<string, Assembly> deps = new Dictionary<string, Assembly>();
+        private static ILogger logger = new ConsoleLogger();
 
         static void Main(string[] args)
         {
             dataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Koakuma");
-            Console.WriteLine($"[  APP  ] {dataFolder}");
+            logger.Log(LogLevel.Debug, "APP", dataFolder);
             Directory.CreateDirectory(dataFolder);
             Directory.CreateDirectory(Path.Combine(dataFolder, "plugins"));
             Directory.CreateDirectory(Path.Combine(dataFolder, "dependencies"));
@@ -50,6 +51,8 @@ namespace Koakuma
                 node = new KoakumaNode(keyPair);
             }
 
+            node.Logger = logger;
+
             node.TrustedKeys = new TrustedKeyStore(Path.Combine(dataFolder, "trusted_keys"));
             foreach (var f in Directory.GetFiles(Path.Combine(dataFolder, "add_keys")))
             {
@@ -63,7 +66,7 @@ namespace Koakuma
                 {
                     var ass = Assembly.LoadFile(Path.GetFullPath(f));
                     deps[ass.ToString()] = ass;
-                    Console.WriteLine($"[DEPLOAD] {ass}");
+                    logger.Log(LogLevel.Debug, "DEPLOAD", ass);
                 }
                 finally { }
             }
@@ -77,7 +80,7 @@ namespace Koakuma
                 {
                     mod.Config = LoadConfig(mod.ID);
                     node.AddModule(mod);
-                    Console.WriteLine($"[MODLOAD] {mod.ID.ToLowerInvariant()}");
+                    logger.Log(LogLevel.Debug, "MODLOAD", mod.ID.ToLowerInvariant());
                 }
                 finally { }
             }
@@ -89,14 +92,14 @@ namespace Koakuma
                 while (!node.Setup(host, port))
                 {
                     Thread.Sleep(30 * 1000);
-
-                    Console.WriteLine("[  APP  ] Retrying");
+                    
+                    logger.Log(LogLevel.Info, "APP", "Retrying");
                     baseCfg.Reload();
 
                     host = baseCfg.Get<string>("host", null);
                     port = baseCfg.Get("host_port", -1);
                 }
-                Console.WriteLine("[  APP  ] Connected");
+                logger.Log(LogLevel.Info, "APP", "Connected");
             }
             else
             {
@@ -111,8 +114,8 @@ namespace Koakuma
                 }
                 finally { }
             }
-
-            Console.WriteLine($"[  APP  ] Done");
+            
+            logger.Log(LogLevel.Info, "APP", "Done");
             Thread.Sleep(-1);
         }
 
@@ -120,16 +123,16 @@ namespace Koakuma
         {
             if(deps.ContainsKey(args.Name))
             {
-                Console.WriteLine($"[RESOLVE] {args.Name}");
+                logger.Log(LogLevel.Debug, "RESOLVE", args.Name);
                 return deps[args.Name];
             }
-            Console.WriteLine($"[RESOLVE] FAILED: {args.Name}");
+            logger.Log(LogLevel.Debug, "RESOLVE", $"FAILED: {args.Name}");
             return null;
         }
 
         private static ModuleConfig LoadConfig(string module)
         {
-            Console.WriteLine($"[CFGLOAD] ./configs/{module.ToLowerInvariant()}.cfg");
+            logger.Log(LogLevel.Debug, "CFGLOAD", $"./configs/{module.ToLowerInvariant()}.cfg");
             return new ModuleConfig(Path.Combine(dataFolder, "configs", $"{module.ToLowerInvariant()}.cfg"));
         }
 

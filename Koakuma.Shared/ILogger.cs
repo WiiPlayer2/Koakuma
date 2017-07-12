@@ -8,6 +8,8 @@ namespace Koakuma.Shared
 {
     public interface ILogger
     {
+        LogLevel OutputLevel { get; set; }
+
         void Log(LogLevel level, string message);
 
         void Log(LogLevel level, object obj);

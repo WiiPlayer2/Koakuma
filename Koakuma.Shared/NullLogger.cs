@@ -8,6 +8,8 @@ namespace Koakuma.Shared
 {
     class NullLogger : ILogger
     {
+        public LogLevel OutputLevel { get; set; }
+
         public void Log(LogLevel level, object obj) { }
 
         public void Log(LogLevel level, string message) { }

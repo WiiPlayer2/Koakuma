@@ -10,6 +10,7 @@ namespace Koakuma.Shared
     {
         public ModuleLogger(KoakumaNode node, IModule module)
         {
+            OutputLevel = LogLevel.Verbose;
             Node = node;
             Module = module;
         }
@@ -18,24 +19,38 @@ namespace Koakuma.Shared
 
         public IModule Module { get; private set; }
 
+        public LogLevel OutputLevel { get; set; }
+
         public void Log(LogLevel level, object obj)
         {
-            Node.Logger.Log(level, Module.ID, obj);
+            if (level >= OutputLevel)
+            {
+                Node.Logger.Log(level, Module.ID, obj);
+            }
         }
 
         public void Log(LogLevel level, string message)
         {
-            Node.Logger.Log(level, Module.ID, message);
+            if (level >= OutputLevel)
+            {
+                Node.Logger.Log(level, Module.ID, message);
+            }
         }
 
         public void Log(LogLevel level, string source, object obj)
         {
-            Node.Logger.Log(level, $"{Module.ID}/{source}", obj);
+            if (level >= OutputLevel)
+            {
+                Node.Logger.Log(level, $"{Module.ID}/{source}", obj);
+            }
         }
 
         public void Log(LogLevel level, string source, string message)
         {
-            Node.Logger.Log(level, $"{Module.ID}/{source}", message);
+            if (level >= OutputLevel)
+            {
+                Node.Logger.Log(level, $"{Module.ID}/{source}", message);
+            }
         }
     }
 }
