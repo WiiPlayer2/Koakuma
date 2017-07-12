@@ -10,6 +10,7 @@ namespace Koakuma.Shared
 {
     public abstract class ServiceInterface
     {
+
         #region Private Fields
 
         private static Dictionary<Type, Func<PublicKey, IModule, object>> binds;
@@ -41,69 +42,6 @@ namespace Koakuma.Shared
 
         #region Public Methods
 
-        public void HandleMessage(ModuleID from, BaseMessage msg, byte[] payload)
-        {
-            if (from == Target)
-            {
-                HandleMessageInternal(from, msg, payload);
-            }
-        }
-
-        #endregion Public Methods
-
-        private static void CheckRegister<T>()
-            where T : ServiceInterface
-        {
-            if (!defaultIDs.ContainsKey(typeof(T)))
-            {
-                var attr = typeof(T).GetCustomAttributes(typeof(Defaults), false).FirstOrDefault() as Defaults;
-                if (attr == null)
-                {
-                    throw new InvalidOperationException($"{typeof(T)} is missing an {typeof(Defaults)} attribute.");
-                }
-
-                var constructor = typeof(T).GetConstructor(new[] { typeof(ModuleID), typeof(IModule) });
-                if (constructor != null)
-                {
-                    defaultIDs[typeof(T)] = attr.ID;
-                    binds[typeof(T)] = (k, m) =>
-                    {
-                        var ret = constructor.Invoke(new object[] {new ModuleID()
-                        {
-                            ModuleName = attr.ID,
-                            PublicKey = k,
-                        }, m}) as ServiceInterface;
-                        ret.Timeout = attr.Timeout;
-                        return ret;
-                    };
-                }
-                else
-                {
-                    constructor = typeof(T).GetConstructor(new[] { typeof(ModuleID), typeof(IModule), typeof(TimeSpan) });
-                    if (constructor != null)
-                    {
-                        defaultIDs[typeof(T)] = attr.ID;
-                        binds[typeof(T)] = (k, m) => constructor.Invoke(new object[] { new ModuleID()
-                        {
-                            ModuleName = attr.ID,
-                            PublicKey = k,
-                        }, m, attr.Timeout});
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException($"{typeof(T)} has now suitable constructor.");
-                    }
-                }
-            }
-        }
-
-        public static IEnumerable<PublicKey> Find<T>(PublicKey key, IModule module)
-            where T : ServiceInterface
-        {
-            CheckRegister<T>();
-            return Find(defaultIDs[typeof(T)], key, module);
-        }
-
         public static T Bind<T>(PublicKey key, IModule module)
             where T : ServiceInterface
         {
@@ -122,6 +60,23 @@ namespace Koakuma.Shared
             CheckRegister<T>();
             return BindAll(defaultIDs[typeof(T)], key, module, (k, m) => binds[typeof(T)](k, m) as T);
         }
+
+        public static IEnumerable<PublicKey> Find<T>(PublicKey key, IModule module)
+            where T : ServiceInterface
+        {
+            CheckRegister<T>();
+            return Find(defaultIDs[typeof(T)], key, module);
+        }
+
+        public void HandleMessage(ModuleID from, BaseMessage msg, byte[] payload)
+        {
+            if (from == Target)
+            {
+                HandleMessageInternal(from, msg, payload);
+            }
+        }
+
+        #endregion Public Methods
 
         #region Protected Methods
 
@@ -217,10 +172,61 @@ namespace Koakuma.Shared
 
         #endregion Protected Methods
 
+        #region Private Methods
+
+        private static void CheckRegister<T>()
+                                                    where T : ServiceInterface
+        {
+            if (!defaultIDs.ContainsKey(typeof(T)))
+            {
+                var attr = typeof(T).GetCustomAttributes(typeof(Defaults), false).FirstOrDefault() as Defaults;
+                if (attr == null)
+                {
+                    throw new InvalidOperationException($"{typeof(T)} is missing an {typeof(Defaults)} attribute.");
+                }
+
+                var constructor = typeof(T).GetConstructor(new[] { typeof(ModuleID), typeof(IModule) });
+                if (constructor != null)
+                {
+                    defaultIDs[typeof(T)] = attr.ID;
+                    binds[typeof(T)] = (k, m) =>
+                    {
+                        var ret = constructor.Invoke(new object[] {new ModuleID()
+                        {
+                            ModuleName = attr.ID,
+                            PublicKey = k,
+                        }, m}) as ServiceInterface;
+                        ret.Timeout = attr.Timeout;
+                        return ret;
+                    };
+                }
+                else
+                {
+                    constructor = typeof(T).GetConstructor(new[] { typeof(ModuleID), typeof(IModule), typeof(TimeSpan) });
+                    if (constructor != null)
+                    {
+                        defaultIDs[typeof(T)] = attr.ID;
+                        binds[typeof(T)] = (k, m) => constructor.Invoke(new object[] { new ModuleID()
+                        {
+                            ModuleName = attr.ID,
+                            PublicKey = k,
+                        }, m, attr.Timeout});
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException($"{typeof(T)} has now suitable constructor.");
+                    }
+                }
+            }
+        }
+
+        #endregion Private Methods
+
         #region Public Classes
 
         public sealed class Defaults : Attribute
         {
+
             #region Public Constructors
 
             public Defaults(string id)
@@ -244,8 +250,10 @@ namespace Koakuma.Shared
             public TimeSpan Timeout { get; set; }
 
             #endregion Public Properties
+
         }
 
         #endregion Public Classes
+
     }
 }
