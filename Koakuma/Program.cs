@@ -86,6 +86,16 @@ namespace Koakuma
                 {
                     mod.Config = LoadConfig(mod.ID);
                     node.AddModule(mod);
+                    logger.Log(LogLevel.Debug, "MODADD", mod.ID.ToLowerInvariant());
+                }
+                finally { }
+            }
+
+            foreach (var mod in node.Modules)
+            {
+                try
+                {
+                    mod.Load();
                     logger.Log(LogLevel.Debug, "MODLOAD", mod.ID.ToLowerInvariant());
                 }
                 finally { }

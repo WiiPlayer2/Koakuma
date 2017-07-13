@@ -89,8 +89,6 @@ namespace Koakuma.Shared
                 {
                     modules[module.ID.ToLowerInvariant()] = module;
                 }
-
-                module.Load();
             }
         }
 
