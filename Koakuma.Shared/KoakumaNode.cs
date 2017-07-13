@@ -1,5 +1,6 @@
 ﻿using Koakuma.Shared.Messages;
 using MessageNetwork;
+using Newtonsoft.Json.Linq;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
 using System.Collections.Generic;
@@ -130,6 +131,11 @@ namespace Koakuma.Shared
 
         private void KoakumaNode_MessageReceived(MessageNode<KoakumaMessage> sender, RsaKeyParameters senderKey, bool isPublic, KoakumaMessage message, byte[] payload)
         {
+            if (message.Message != null && message.Message.JObject == null)
+            {
+                message.Message.JObject = JObject.FromObject(message.Message);
+            }
+
             if (message.To?.ModuleName != null)
             {
                 if (modules.ContainsKey(message.To.ModuleName.ToLowerInvariant()))
