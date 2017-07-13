@@ -1,4 +1,5 @@
 ﻿using Koakuma.Shared.Messages;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Threading.Tasks;
 
@@ -15,6 +16,12 @@ namespace Koakuma.Shared
         void SendMessage(ModuleID receiver, BaseMessage msg, TimeSpan timeout, MessageCallback callback, Action timeoutCallback, byte[] payload = null);
 
         Task<BaseMessage> SendMessage(ModuleID receiver, BaseMessage msg, TimeSpan timeout, byte[] payload = null);
+
+        void SendRawMessage(ModuleID receiver, JObject msg, byte[] payload = null);
+
+        void SendRawMessage(ModuleID receiver, JObject msg, TimeSpan timeout, MessageCallback callback, Action timeoutCallback, byte[] payload = null);
+
+        Task<BaseMessage> SendRawMessage(ModuleID receiver, JObject msg, TimeSpan timeout, byte[] payload = null);
 
         void Invoke(ModuleID receiver, string command, byte[] payload = null);
 

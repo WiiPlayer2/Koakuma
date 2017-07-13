@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Timer = System.Timers.Timer;
+using Newtonsoft.Json.Linq;
 
 namespace Koakuma.Shared
 {
@@ -165,21 +166,49 @@ namespace Koakuma.Shared
 
         public Task<BaseMessage> SendMessage(ModuleID receiver, BaseMessage msg, TimeSpan timeout, byte[] payload = null)
         {
-            return Task.Run(() =>
-            {
-                var waitHandle = new ManualResetEvent(false);
-                BaseMessage ret = null;
-                SendMessage(receiver, msg, timeout, (_, cbmsg, __) =>
-                {
-                    ret = cbmsg;
-                    waitHandle.Set();
-                }, () => waitHandle.Set(), payload);
-                waitHandle.WaitOne();
-                return ret;
-            });
+            return SendMessageInternal(receiver, msg, timeout, SendMessage, payload);
         }
 
         public void SendMessage(ModuleID receiver, BaseMessage msg, TimeSpan timeout, MessageCallback callback, Action timeoutCallback, byte[] payload = null)
+        {
+            SendMessageInternal(receiver, replyId => new KoakumaMessage()
+            {
+                From = ModuleID,
+                To = receiver,
+                Message = msg,
+                ReplyID = replyId,
+            }, timeout, callback, timeoutCallback, payload);
+        }
+
+        public void SendRawMessage(ModuleID receiver, JObject msg, byte[] payload = null)
+        {
+            Node.SendMessage(receiver?.PublicKey, new KoakumaMessage()
+            {
+                From = ModuleID,
+                To = receiver,
+                MessageJson = msg,
+            }, payload);
+        }
+
+        public Task<BaseMessage> SendRawMessage(ModuleID receiver, JObject msg, TimeSpan timeout, byte[] payload = null)
+        {
+            return SendMessageInternal(receiver, msg, timeout, SendRawMessage, payload);
+        }
+
+        public void SendRawMessage(ModuleID receiver, JObject msg, TimeSpan timeout, MessageCallback callback, Action timeoutCallback, byte[] payload = null)
+        {
+            SendMessageInternal(receiver, replyId => new KoakumaMessage()
+            {
+                From = ModuleID,
+                To = receiver,
+                MessageJson = msg,
+                ReplyID = replyId,
+            }, timeout, callback, timeoutCallback, payload);
+        }
+
+        #endregion Public Methods
+
+        private void SendMessageInternal(ModuleID receiver, Func<int, KoakumaMessage> msgFunc, TimeSpan timeout, MessageCallback callback, Action timeoutCallback, byte[] payload)
         {
             var id = 0;
             lock (callbacks)
@@ -202,16 +231,24 @@ namespace Koakuma.Shared
                 timeoutCallback?.Invoke();
             };
 
-            Node.SendMessage(receiver?.PublicKey, new KoakumaMessage()
-            {
-                From = ModuleID,
-                To = receiver,
-                Message = msg,
-                ReplyID = id,
-            }, payload);
+            Node.SendMessage(receiver?.PublicKey, msgFunc(id), payload);
             timer.Start();
         }
 
-        #endregion Public Methods
+        private Task<BaseMessage> SendMessageInternal<T>(ModuleID receiver, T msg, TimeSpan timeout, Action<ModuleID, T, TimeSpan, MessageCallback, Action, byte[]> sendFunc, byte[] payload)
+        {
+            return Task.Run(() =>
+            {
+                var waitHandle = new ManualResetEvent(false);
+                BaseMessage ret = null;
+                sendFunc(receiver, msg, timeout, (_, cbmsg, __) =>
+                {
+                    ret = cbmsg;
+                    waitHandle.Set();
+                }, () => waitHandle.Set(), payload);
+                waitHandle.WaitOne();
+                return ret;
+            });
+        }
     }
 }

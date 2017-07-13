@@ -98,7 +98,10 @@ namespace Koakuma
                     mod.Load();
                     logger.Log(LogLevel.Debug, "MODLOAD", mod.ID.ToLowerInvariant());
                 }
-                finally { }
+                catch(Exception e)
+                {
+                    logger.Log(LogLevel.Error, "MODLOAD", e);
+                }
             }
 
             var host = baseCfg.Get<string>("host", null);
@@ -128,7 +131,7 @@ namespace Koakuma
                 {
                     service.Start();
                 }
-                finally { }
+                catch { }
             }
 
             logger.Log(LogLevel.Info, "APP", "Done");
