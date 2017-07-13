@@ -130,7 +130,7 @@ namespace Koakuma.Shared
 
         private void KoakumaNode_MessageReceived(MessageNode<KoakumaMessage> sender, RsaKeyParameters senderKey, bool isPublic, KoakumaMessage message, byte[] payload)
         {
-            if (message.To.ModuleName != null)
+            if (message.To?.ModuleName != null)
             {
                 if (modules.ContainsKey(message.To.ModuleName.ToLowerInvariant()))
                 {
